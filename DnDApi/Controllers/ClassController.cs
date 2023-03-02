@@ -4,84 +4,50 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DnDProject.Data;
-using DnDProject.Models;
+using DnDApi.Core.Source;
+using DnDApi.Shared.DTOs;
 
-namespace DnDProject.Controllers
+namespace DnDApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ClassController : ControllerBase
     {
-        private readonly Context _context;
 
-        public ClassController(Context context) {
-            _context = context;
+        private ClassCore ClassCore { get; }
+
+        public ClassController(ClassCore core) {
+            ClassCore = core;
         }
 
-        // GET: api/Class
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Class>>> GetClasses() {
-            return await _context.Classes.ToListAsync();
+        public ActionResult<List<Class>> GetClasses() {
+            return null;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Class>> GetClass(Guid id) {
-            var model = await _context.Classes.FindAsync(id);
-
-            if (model == null) {
-                return NotFound();
-            }
-
-            return model;
+        public ActionResult<Class> GetClass(Guid id) {
+           
+            return null;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutClass(Guid id, Class model) {
-            if (id != model.Id) {
-                return BadRequest();
-            }
-
-            _context.Entry(model).State = EntityState.Modified;
-
-            try {
-                await _context.SaveChangesAsync();
-            } catch (DbUpdateConcurrencyException) {
-                if (!ClassExists(id)) {
-                    return NotFound();
-                } else {
-                    throw;
-                }
-            }
-
+        public IActionResult PutClass(Guid id, Class model) {
+            
             return NoContent();
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<Class>> PostClass(Class model) {
-            _context.Classes.Add(model);
-            await _context.SaveChangesAsync();
-
+        public ActionResult<Class> PostClass(Class model) {
+            
             return CreatedAtAction("GetClass", new { id = model.Id }, model);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClass(Guid id) {
-            var model = await _context.Classes.FindAsync(id);
-            if (model == null) {
-                return NotFound();
-            }
-
-            _context.Classes.Remove(model);
-            await _context.SaveChangesAsync();
+        public IActionResult DeleteClass(Guid id) {
 
             return NoContent();
-        }
-
-        private bool ClassExists(Guid id) {
-            return _context.Classes.Any(e => e.Id == id);
         }
     }
 }

@@ -1,8 +1,10 @@
-using DnDProject.Data;
+using DnDApi.Core;
+using DnDApi.DataAccess.Data;
+using DnDApi.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace DnDProject
+namespace DnDApi
 {
     public class Program
 
@@ -16,10 +18,10 @@ namespace DnDProject
 
             builder.Services.AddControllers();
 
+            CreateContext.AddContext(builder.Services, configuration.GetConnectionString("DndDatabase"));
 
+            CoreInjector.Create(builder.Services);
 
-            builder.Services.AddDbContext<Context>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DndDatabase")));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

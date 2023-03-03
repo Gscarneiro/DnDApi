@@ -8,20 +8,25 @@ namespace DnDApi.Core.Source
     {
         private ClassDataAccess ClassDataAccess { get; }
 
-        public ClassCore(Context context, ClassDataAccess classDataAccess) : base(context) {
+        public ClassCore(Context context, ClassDataAccess classDataAccess) : base(context)
+        {
             ClassDataAccess = classDataAccess;
         }
 
-
-        public List<Class> List() {
+        public List<Class> List()
+        {
             return ClassDataAccess.List();
         }
 
-        public Class Get(Guid id) {
+        public Class Get(Guid id)
+        {
             return ClassDataAccess.Get(id);
         }
 
-        public Class Insert(Class model) {
+        public Class Insert(Class model)
+        {
+            model.Id = new Guid();
+
             ClassDataAccess.Insert(model);
 
             DndDbContext.SaveChangesAsync();
@@ -29,18 +34,18 @@ namespace DnDApi.Core.Source
             return model;
         }
 
-        public void Update(Class model) {
-
+        public void Update(Class model)
+        {
             ClassDataAccess.Update(model);
 
             DndDbContext.SaveChangesAsync();
         }
 
-        public void Delete(Guid id) {
-                ClassDataAccess.Delete(id);
+        public void Delete(Guid id)
+        {
+            ClassDataAccess.Delete(id);
 
-
-                DndDbContext.SaveChangesAsync();
+            DndDbContext.SaveChangesAsync();
         }
     }
 }

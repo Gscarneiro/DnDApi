@@ -16,38 +16,39 @@ namespace DnDApi.Controllers
 
         private ClassCore ClassCore { get; }
 
-        public ClassController(ClassCore core) {
+        public ClassController(ClassCore core)
+        {
             ClassCore = core;
         }
 
         [HttpGet]
-        public ActionResult<List<Class>> GetClasses() {
-            return null;
+        public JsonResult List()
+        {
+            return new JsonResult(ClassCore.List());
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Class> GetClass(Guid id) {
-           
-            return null;
+        [HttpGet("{id:Guid}")]
+        public JsonResult Get(Guid id)
+        {
+            return new JsonResult(ClassCore.Get(id));
         }
-
-        [HttpPut("{id}")]
-        public IActionResult PutClass(Guid id, Class model) {
-            
-            return NoContent();
-        }
-
 
         [HttpPost]
-        public ActionResult<Class> PostClass(Class model) {
-            
-            return CreatedAtAction("GetClass", new { id = model.Id }, model);
+        public JsonResult Post(Class model)
+        {
+            return new JsonResult(ClassCore.Insert(model));
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteClass(Guid id) {
+        [HttpPut("{id:Guid}")]
+        public void Put(Guid id, Class model)
+        {
+            ClassCore.Update(model);
+        }
 
-            return NoContent();
+        [HttpDelete("{id:Guid}")]
+        public void Delete(Guid id)
+        {
+            ClassCore.Delete(id);
         }
     }
 }

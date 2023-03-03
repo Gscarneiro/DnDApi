@@ -42,6 +42,9 @@ namespace DnDApi.Controllers
         [HttpPut("{id:Guid}")]
         public void Put(Guid id, Class model)
         {
+            if(model.Id != id)
+                throw new InvalidOperationException();
+
             ClassCore.Update(model);
         }
 

@@ -18,7 +18,12 @@ namespace DnDApi.DataAccess.Source
 
         public Class Get(Guid id)
         {
-            return DndDbContext.Classes.Find(id);
+            var model = DndDbContext.Classes.Include(a => a.SubClasses).Include(a => a.Features).FirstOrDefault(c => c.Id == id);
+            
+            if (model == null)
+                throw new KeyNotFoundException();
+            
+            return model;
         }
 
         public Class Insert(Class model)
@@ -30,14 +35,14 @@ namespace DnDApi.DataAccess.Source
 
         public void Update(Class model)
         {
-            DndDbContext.Entry(model).State = EntityState.Modified;
+            DndDbContext.Attach(model);
 
-            DndDbContext.Classes.Update(model);
+            DndDbContext.Entry(model).State = EntityState.Modified;
         }
 
         public void Delete(Guid id)
         {
-            var model = DndDbContext.Classes.Find(id);
+            var model = DndDbContext.Classes.FirstOrDefault(c => c.Id == id);
 
             if(model != null) {
                 DndDbContext.Classes.Remove(model);

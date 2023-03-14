@@ -13,6 +13,13 @@ namespace DnDApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy => {
+                        policy.WithOrigins("http://localhost:4200");
+                    });
+            });
 
             ConfigurationManager configuration = builder.Configuration;
 
@@ -38,6 +45,7 @@ namespace DnDApi
 
             app.UseAuthorization();
 
+            app.UseCors();
 
             app.MapControllers();
 

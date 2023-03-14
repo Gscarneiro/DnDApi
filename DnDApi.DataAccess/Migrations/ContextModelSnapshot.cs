@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DnDApi.Migrations
+namespace DnDApi.DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
     partial class ContextModelSnapshot : ModelSnapshot
@@ -17,25 +17,10 @@ namespace DnDApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ClassFeature", b =>
-                {
-                    b.Property<Guid>("ClassesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FeaturesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ClassesId", "FeaturesId");
-
-                    b.HasIndex("FeaturesId");
-
-                    b.ToTable("ClassFeature");
-                });
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("DnDApi.Shared.DTOs.Class", b =>
                 {
@@ -85,6 +70,9 @@ namespace DnDApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ClassId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -93,7 +81,24 @@ namespace DnDApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SubClassId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SubRaceId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("RaceId");
+
+                    b.HasIndex("SubClassId");
+
+                    b.HasIndex("SubRaceId");
 
                     b.ToTable("Feature", (string)null);
                 });
@@ -185,64 +190,23 @@ namespace DnDApi.Migrations
                     b.ToTable("SubRace", (string)null);
                 });
 
-            modelBuilder.Entity("FeatureRace", b =>
-                {
-                    b.Property<Guid>("FeaturesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RacesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FeaturesId", "RacesId");
-
-                    b.HasIndex("RacesId");
-
-                    b.ToTable("FeatureRace");
-                });
-
-            modelBuilder.Entity("FeatureSubClass", b =>
-                {
-                    b.Property<Guid>("FeaturesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SubClassesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FeaturesId", "SubClassesId");
-
-                    b.HasIndex("SubClassesId");
-
-                    b.ToTable("FeatureSubClass");
-                });
-
-            modelBuilder.Entity("FeatureSubRace", b =>
-                {
-                    b.Property<Guid>("FeaturesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SubRacesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FeaturesId", "SubRacesId");
-
-                    b.HasIndex("SubRacesId");
-
-                    b.ToTable("FeatureSubRace");
-                });
-
-            modelBuilder.Entity("ClassFeature", b =>
+            modelBuilder.Entity("DnDApi.Shared.DTOs.Feature", b =>
                 {
                     b.HasOne("DnDApi.Shared.DTOs.Class", null)
-                        .WithMany()
-                        .HasForeignKey("ClassesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Features")
+                        .HasForeignKey("ClassId");
 
-                    b.HasOne("DnDApi.Shared.DTOs.Feature", null)
-                        .WithMany()
-                        .HasForeignKey("FeaturesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("DnDApi.Shared.DTOs.Race", null)
+                        .WithMany("Features")
+                        .HasForeignKey("RaceId");
+
+                    b.HasOne("DnDApi.Shared.DTOs.SubClass", null)
+                        .WithMany("Features")
+                        .HasForeignKey("SubClassId");
+
+                    b.HasOne("DnDApi.Shared.DTOs.SubRace", null)
+                        .WithMany("Features")
+                        .HasForeignKey("SubRaceId");
                 });
 
             modelBuilder.Entity("DnDApi.Shared.DTOs.SubClass", b =>
@@ -259,59 +223,28 @@ namespace DnDApi.Migrations
                         .HasForeignKey("RaceId");
                 });
 
-            modelBuilder.Entity("FeatureRace", b =>
-                {
-                    b.HasOne("DnDApi.Shared.DTOs.Feature", null)
-                        .WithMany()
-                        .HasForeignKey("FeaturesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DnDApi.Shared.DTOs.Race", null)
-                        .WithMany()
-                        .HasForeignKey("RacesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FeatureSubClass", b =>
-                {
-                    b.HasOne("DnDApi.Shared.DTOs.Feature", null)
-                        .WithMany()
-                        .HasForeignKey("FeaturesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DnDApi.Shared.DTOs.SubClass", null)
-                        .WithMany()
-                        .HasForeignKey("SubClassesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FeatureSubRace", b =>
-                {
-                    b.HasOne("DnDApi.Shared.DTOs.Feature", null)
-                        .WithMany()
-                        .HasForeignKey("FeaturesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DnDApi.Shared.DTOs.SubRace", null)
-                        .WithMany()
-                        .HasForeignKey("SubRacesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DnDApi.Shared.DTOs.Class", b =>
                 {
+                    b.Navigation("Features");
+
                     b.Navigation("SubClasses");
                 });
 
             modelBuilder.Entity("DnDApi.Shared.DTOs.Race", b =>
                 {
+                    b.Navigation("Features");
+
                     b.Navigation("SubRaces");
+                });
+
+            modelBuilder.Entity("DnDApi.Shared.DTOs.SubClass", b =>
+                {
+                    b.Navigation("Features");
+                });
+
+            modelBuilder.Entity("DnDApi.Shared.DTOs.SubRace", b =>
+                {
+                    b.Navigation("Features");
                 });
 #pragma warning restore 612, 618
         }

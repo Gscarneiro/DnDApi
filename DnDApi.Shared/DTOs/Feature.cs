@@ -12,14 +12,5 @@ namespace DnDApi.Shared.DTOs
         public string Name { get; set; }
 
         public string Description { get; set; }
-
-
-        public ICollection<Class> Classes { get; set; }
-
-        public ICollection<SubClass> SubClasses { get; set; }
-        
-        public ICollection<Race> Races { get; set; }
-        
-        public ICollection<SubRace> SubRaces { get; set; }
     }
 }

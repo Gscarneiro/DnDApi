@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DnDApi.Migrations
+namespace DnDApi.DataAccess.Migrations
 {
-    /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class inital : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -154,7 +152,6 @@ namespace DnDApi.Migrations
                 column: "RaceId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

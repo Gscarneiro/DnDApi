@@ -9,6 +9,7 @@ namespace DnDApi.Core
         public static void Create(IServiceCollection service) {
             
             service.AddTransient<ClassCore>();
+            service.AddTransient<RaceCore>();
 
             DataAccessInjector.Create(service);
         }

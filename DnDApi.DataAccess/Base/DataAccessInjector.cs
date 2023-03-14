@@ -7,6 +7,7 @@ namespace DnDApi.DataAccess
     {
         public static void Create(IServiceCollection service) {
             service.AddTransient<ClassDataAccess>();
+            service.AddTransient<RaceDataAccess>();
         }
     }
 }

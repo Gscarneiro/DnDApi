@@ -32,9 +32,24 @@ namespace DnDApi.Core.Source
         {
             model.Id = new Guid();
 
+            foreach (var subRace in model.SubRaces) {
+                if(subRace.Id == Guid.Empty)
+                    subRace.Id = new Guid();
+
+                foreach(var feature in subRace.Features) {
+                    if(feature.Id == Guid.Empty)
+                        feature.Id = new Guid();
+                }
+            }
+
+            foreach(var feature in model.Features) {
+                if(feature.Id == Guid.Empty)
+                    feature.Id = new Guid();
+            }
+
             RaceDataAccess.Insert(model);
 
-            DndDbContext.SaveChangesAsync();
+            DndDbContext.SaveChanges();
 
             return model;
         }

@@ -36,7 +36,7 @@ namespace DnDApi.DataAccess.Source
             return model;
         }
 
-        public void Update(Class model)
+        public void Update(Race model)
         {
             DndDbContext.Attach(model);
 
